@@ -1,0 +1,110 @@
+Exercise: Adventure Works executive summary
+Introduction
+You've come a long way on your journey to master data analytics. By now, you're well-versed in visualizing and analyzing data in Power BI. Today, you'll apply that knowledge in a scenario, working on an Adventure Works Microsoft Power BI report that urgently needs your expertise. In this exercise, you'll be doing more than just creating visuals; you'll translate data into actionable insights for decision-making at the highest levels. Specifically, you will be asked to:
+
+Utilize the table, column chart, line chart, KPI, and Q&A visuals to bring data to life.
+
+Implement forecasting on your line chart to anticipate future trends.
+
+Employ the Q&A visual to enable a more natural conversation with data.
+
+Scenario
+You've just received an email marked "URGENT" from the executives at Adventure Works. They've heard about your expertise in data analytics and have a pressing request: "We need a comprehensive Power BI report and dashboard ASAP!" Now, the room you find yourself in isn't just any room; you're in the executive suite of Adventure Works, surrounded by the company's top minds. These decision-makers juggle multi-million-dollar budgets, eyeing global expansion and continually adapting to ever-changing market dynamics. They don't just want data; they need actionable insights, and they need them now. 
+
+The executives understand that in the modern business landscape, data isn't just an asset; it's the essence of strategic decision-making. As you look around, you see various department heads clutching different pieces of the data puzzle—sales printouts, customer demographics, and inventory reports—but they're fragmented, disjointed, and not speaking to each other. The executives look to you to make the data understandable and actionable. You've been given a significant responsibility: to harness the potential of sales and customer data that will influence high-stakes decision-making. So, are you ready to dive in?
+
+Instructions
+Download and open the Adventure Works Power BI report titled Adventure Works executive summary.pbix and follow the prompts below to complete the exercise.
+
+Step 1: Create core visualizations
+Table visualization
+In a bustling company like Adventure Works, getting lost in the noise of numerous SKUs, fluctuating sales, and changing order statuses is easy. First, create a table visualization that will serve as a quick reference, telling the executive team what products are selling and where it’s at in the delivery pipeline.
+
+From the Visualizations pane, select the Table icon to create an empty table visualization on the canvas.
+
+On the Fields pane, select the Sales table to expand it and view its fields.
+
+Drag Product ID from the Fields pane to the Columns well in the Visualizations pane.
+
+Next, drag Product Name, Order ID, Order Status, and Order Total to the same Columns well.
+
+In the Format tab, expand the Style preset option and select the Minimal preset from the available dropdown.
+
+Select and drag the edges of the table visualization on your canvas to resize it and place the visualization on the right side of the canvas.
+
+Column chart
+It's not enough to know what sold; it's crucial to know what's selling dominantly and what's not leaving the warehouse. A column chart instantly displays which product categories at Adventure Works are revenue-generators and which need a strategic revisit.
+
+Select the Clustered column chart icon in the Visualizations pane. 
+
+Drag Product Category from the Sales table and drop it into the X-Axis well.
+
+Drag Order Total from the same Sales table and drop it into the Y-Axis well.
+
+In the Format tab, locate the Columns > Colors option. Input Dark Blue: #2D386Dfor a unified look.
+
+Drag Order Quantity and Product Weight fields from the Sales table into the Tooltips field well.
+
+Upon selecting the ellipsis at the visualization's top right corner, select the Sort Axis dropdown, followed by Sum of Order Total. Then select Sort ascending to sort the values in ascending order.
+
+Observe the column chart results and note the Product Category with the lowest Order Total value.
+
+Line chart
+Remembering the conversation while seated in the executive suite, you overheard the Adventure Works executive team ponder “When did the sales peak? When did they drop?” as their seasonal strategies depend on these insights. Sales figures are meaningless without context, so you decide to take action and create a line chart.  
+
+Select the Line chart icon in the Visualizations pane.
+
+Drag OrderDate from the Sales table into the X-Axis well. 
+
+Then, drag Order Total and put it in the Y-Axis well.
+
+Select and drag the edges of the Line chart visualization on your canvas to resize it, and place it in the middle of the canvas, below the column chart, next to the table visualization.
+
+Step 2: Create KPIs
+KPIs offer the executive team a precise performance check into questions like, "Are we hitting our sales goals? How expansive is our customer reach? How are we tracking our goals of being a global player?" These KPIs provide a reality check and inspiration rolled into one.
+
+Select the KPI icon in the Visualizations pane.
+
+Drag Order Total from the Sales table to the Value field well.
+
+Then drag OrderDate from the Sales table to the Trend Axis field well.
+
+Repeat steps 1–3, adding two more KPIs:
+
+Drag Customer ID from the Customers table to the Value field well and the OrderDate from the Sales table to the Trend Axis.
+
+Drag City from the Customers table to the Value field well and the OrderDate from the Sales table to the Trend Axis.
+
+Step 3: Setup forecasting
+You know that forecasting is a critical feature in Power BI that enables the prediction of future trends based on historical data. This is especially useful for executives at Adventure Works looking to make data-driven decisions for the future.
+
+Upon selecting the line chart visualization you've created, you'll notice different tabs in the Visualizations pane. 
+
+Select the Analytics tab, represented by a magnifying glass icon.
+
+In the Analytics pane, locate the Forecast option and toggle the switch beside it. This will add a forecast line to your chart.
+
+Once you've added the forecast, adjust the Seasonality and Confidence interval parameters. Set the Seasonality to 12, as this is useful to account for monthly seasonality. Adjust the Confidence interval value to 99% to ensure high forecast confidence.
+
+Once you've configured the parameters, select Apply. 
+
+Observe the line chart and note the day of the month with the lowest order total for Q1 in 2023.
+
+Step 4: Configure Q&A
+Instead of sifting through several visualizations, you want Adventure Works stakeholders to converse with your data. For the executive team, the Q&A feature could be transformative, allowing them to interact with the data in a conversational manner and generate insights on-the-fly.
+
+On the Visualizations pane, locate and select the Q&A icon that looks like a chat bubble.
+
+The initial size of the Q&A box may not fit your needs. Select the corners to resize the box and select and drag the title bar to reposition it on the left side of your canvas.
+
+Inside the Q&A box, you'll see a text prompt titled Ask a question about your data. Select inside this box, type the following queries, and note down the results:
+
+Which Customer City has the lowest average Order Total?
+
+Which Product Category has the highest average Order Quantity?
+
+Which Product Subcategory has the highest Product Weight?
+
+Conclusion
+You have now not only unraveled the complexity of sales and customer data, but you've empowered the executive decision-makers at Adventure Works with the tools they need to ask the right questions at the right time to make the right decisions. This is not just about visualizing data—it's about turning raw numbers into a meaningful story that everyone in the room can understand and act upon. Remember, in today's world, data is not just an asset – it's the language of business, the currency of the digital age. When used correctly, it has the power not just to reflect the state of a business but to transform it!
+
