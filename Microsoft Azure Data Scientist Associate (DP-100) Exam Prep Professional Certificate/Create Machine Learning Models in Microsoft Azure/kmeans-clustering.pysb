@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "cells": [
+    {
+      "type": "markdown",
+      "content": "# Clustering - K-Means and Hierarchical\n\nIn the last notebook, we learned that data can be grouped into clusters, and we learned how to see whether our data may be compatible with such an analysis. In this notebook, we will perform this clustering automatically.\n\n## Load the data\n\n1. Download [seeds.csv](https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ml-basics/refs/heads/main/Labfiles/data/seeds.csv){:target=\"_blank\"} in a new browser tab, and save it on your local disk.\n2. Then use the **Upload Data** button at the top of this notebook to upload it.\n3. Run the next cell by clicking the **&#9658; Run** button to load the data.\n\n> **Citation**: The seeds dataset used in this exercise was originally published by the Institute of Agrophysics of the Polish Academy of Sciences in Lublin by Dua, D. and Graff, C. (2019). and can be downloaded from the [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml), University of California at Irvine, School of Information and Computer Science.\n"
+    },
+    {
+      "type": "python",
+      "content": "import pandas as pd\n\n# load the training dataset\ndata = pd.read_csv('seeds.csv')\n\n# Display a random sample of 10 observations (just the features)\nfeatures = data[data.columns[0:6]]\nfeatures.sample(10)\n\nfrom sklearn.preprocessing import MinMaxScaler\nfrom sklearn.decomposition import PCA\n\n# Normalize the numeric features so they're on the same scale\nscaled_features = MinMaxScaler().fit_transform(features[data.columns[0:6]])\n\n# Get two principal components\npca = PCA(n_components=2).fit(scaled_features)\nfeatures_2d = pca.transform(scaled_features)\nprint(features_2d[0:10])"
+    },
+    {
+      "type": "markdown",
+      "content": "## K-Means Clustering\n\nThe algorithm we'll use to create our test clusters is *K-Means*. This is a commonly used clustering algorithm that separates a dataset into *K* clusters of equal variance. The number of clusters, *K*, is user-defined. The algorithm has the following steps:\n\n1. A set of K centroids are randomly chosen.\n2. Clusters are formed by assigning the data points to their closest centroid.\n3. The mean of each cluster is computed and the centroid is moved to the mean.\n4. Steps 2 and 3 are repeated until a stopping criteria is met. Typically, the algorithm terminates when each new iteration results in negligible movement of centroids and the clusters become static.\n5. When the clusters stop changing, the algorithm has *converged*, defining the locations of the clusters. Note that the random starting point for the centroids means that re-running the algorithm could result in slightly different clusters, so training usually involves multiple iterations, re-initializing the centroids each time, and the model with the best WCSS (*within cluster sum of squares*) is selected.\n\nLet's try using K-Means on our seeds data with a K value of 3."
+    },
+    {
+      "type": "python",
+      "content": "from sklearn.cluster import KMeans\n\n# Create a model based on 3 centroids\nmodel = KMeans(n_clusters=3, init='k-means++', n_init=100, max_iter=1000)\n\n# Fit to the data and predict the cluster assignments for each data point\nkm_clusters = model.fit_predict(features.values)\n\n# View the cluster assignments\nprint(km_clusters)"
+    },
+    {
+      "type": "markdown",
+      "content": "Now, let's see those cluster assignments with the two-dimensional data points."
+    },
+    {
+      "type": "python",
+      "content": "import matplotlib.pyplot as plt\n\ndef plot_clusters(samples, clusters):\n    col_dic = {0:'blue',1:'green',2:'orange'}\n    mrk_dic = {0:'*',1:'x',2:'+'}\n    colors = [col_dic[x] for x in clusters]\n    markers = [mrk_dic[x] for x in clusters]\n    for sample in range(len(clusters)):\n        plt.scatter(samples[sample][0], samples[sample][1], color = colors[sample], marker=markers[sample], s=100)\n    plt.xlabel('Dimension 1')\n    plt.ylabel('Dimension 2')\n    plt.title('Assignments')\n    plt.show()\n\nplot_clusters(features_2d, km_clusters)\n\n"
+    },
+    {
+      "type": "markdown",
+      "content": "The data should be separated into three distinct clusters. If not, rerun the previous two steps.\n\nnow, let's quantify how well the clusters are separated by calculating a **silhouette score** - a metric with a value between -1 and +1. The closer this value is to +1, the better separated the clusters are."
+    },
+    {
+      "type": "python",
+      "content": "from sklearn.metrics import silhouette_score\n\nscore = silhouette_score(features.values, km_clusters)\nprint(f\"Silhouette Score: {score:.3f}\")"
+    },
+    {
+      "type": "markdown",
+      "content": "So what's the practical use of clustering? In some cases, you'll have data that you need to group into distinct clusters without knowing how many clusters there are or what they indicate. For example, a marketing organization might want to separate customers into distinct segments, and then investigate how those segments exhibit different purchasing behaviors.\n\nSometimes, clustering is used as an initial step towards creating a classification model. You start by identifying distinct groups of data points, and then assign class labels to those clusters. You can then use this labelled data to train a classification model.\n\nIn the case of the seeds data, the different species of seed are already known and encoded as 0 (*Kama*), 1 (*Rosa*), or 2 (*Canadian*), so we can use these identifiers to compare the species classifications to the clusters identified by our unsupervised algorithm."
+    },
+    {
+      "type": "python",
+      "content": "seed_species = data[data.columns[7]]\nplot_clusters(features_2d, seed_species.values)"
+    },
+    {
+      "type": "markdown",
+      "content": "There may be some differences between the cluster assignments and class labels, but the K-Means model should have done a reasonable job of clustering the observations so that seeds of the same species are generally in the same cluster.\n\n## Hierarchical Clustering\n\nHierarchical clustering methods make fewer distributional assumptions when compared to K-Means methods. However, K-Means methods are generally more scalable, sometimes very much so.\n\nHierarchical clustering creates clusters by using either a *divisive* method or an *agglomerative* method. The divisive method is a \"top down\" approach starting with the entire dataset and then finding partitions in a stepwise manner. Agglomerative clustering is a \"bottom up\" approach. In this lab you will work with agglomerative clustering which works as follows:\n\n1. The linkage distances between each of the data points are computed.\n2. Points are clustered pairwise with their nearest neighbor.\n3. Linkage distances between the clusters are computed.\n4. Clusters are combined pairwise into larger clusters.\n5. Steps 3 and 4 are repeated until all data points are in a single cluster.\n\nThe linkage function can be computed in a number of ways:\n- *Ward* linkage measures the increase in variance for the clusters being linked.\n- *Average* linkage uses the mean pairwise distance between the members of the two clusters.\n- *Complete* or *maximal* linkage uses the maximum distance between the members of the two clusters.\n\nSeveral different distance metrics are used to compute linkage functions:\n- *Euclidean* or *l2* distance is the most widely used. This metric is only choice for the Ward linkage method.\n- *Manhattan* or *l1* distance is robust to outliers and has other interesting properties.\n- *Cosine similarity* is the dot product between the location vectors, divided by the magnitudes of the vectors. Note that this metric is a measure of similarity, whereas the other two metrics are measures of difference. Similarity can be quite useful when working with data such as images or text documents.\n\n**Agglomerative Clustering**\n\nLet's see an example of clustering the seeds data using an agglomerative clustering algorithm."
+    },
+    {
+      "type": "python",
+      "content": "from sklearn.cluster import AgglomerativeClustering\n\nagg_model = AgglomerativeClustering(n_clusters=3)\nagg_clusters = agg_model.fit_predict(features.values)\nprint(agg_clusters)"
+    },
+    {
+      "type": "markdown",
+      "content": "So what do the agglomerative cluster assignments look like?"
+    },
+    {
+      "type": "python",
+      "content": "import matplotlib.pyplot as plt\n\ndef plot_clusters(samples, clusters):\n    col_dic = {0:'blue',1:'green',2:'orange'}\n    mrk_dic = {0:'*',1:'x',2:'+'}\n    colors = [col_dic[x] for x in clusters]\n    markers = [mrk_dic[x] for x in clusters]\n    for sample in range(len(clusters)):\n        plt.scatter(samples[sample][0], samples[sample][1], color = colors[sample], marker=markers[sample], s=100)\n    plt.xlabel('Dimension 1')\n    plt.ylabel('Dimension 2')\n    plt.title('Assignments')\n    plt.show()\n\nplot_clusters(features_2d, agg_clusters)\n"
+    },
+    {
+      "type": "markdown",
+      "content": "Let's calculate the Silhouette score."
+    },
+    {
+      "type": "python",
+      "content": "from sklearn.metrics import silhouette_score\n\nscore = silhouette_score(features.values, agg_clusters)\nprint(f\"Silhouette Score: {score:.3f}\")"
+    },
+    {
+      "type": "markdown",
+      "content": "## Summary\n\nHere we practiced using K-Means and hierarchical clustering. This unsupervised learning has the ability to take unlabelled data and identify which data points are similar to others. "
+    }
+  ]
+}
