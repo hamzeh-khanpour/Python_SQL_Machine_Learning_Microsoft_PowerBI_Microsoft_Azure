@@ -43,6 +43,12 @@ Python_SQL_Machine_Learning
 
 
 
+  
+- **Perform data science with Azure Databricks** – Coursera  
+  📜 [View Certificate]([https://www.coursera.org/account/accomplishments/verify/FQYGCDM4UAN9](https://www.coursera.org/account/accomplishments/verify/FQYGCDM4UAN9))
+
+
+
 
   Perfect — let’s make it clean, structured, and aligned with a **standard professional GitHub README format** (clear sections, badges optional, structured layout).
 
@@ -206,7 +212,3 @@ This repository serves as:
 ---
   
 
-
-  
-- **Perform data science with Azure Databricks** – Coursera  
-  📜 [View Certificate](https://coursera.org/verify/YYYYYY)
